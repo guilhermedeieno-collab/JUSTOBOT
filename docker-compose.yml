@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # Aplicação principal
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: justobot-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-True}
+      - DATABASE_URL=postgresql+asyncpg://justobot:justobot123@db:5432/justobot
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+    volumes:
+      - ./app:/app/app
+      - ./logs:/app/logs
+    depends_on:
+      - db
+      - redis
+    networks:
+      - justobot-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Banco de dados PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: justobot-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=justobot
+      - POSTGRES_PASSWORD=justobot123
+      - POSTGRES_DB=justobot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - justobot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U justobot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis para cache
+  redis:
+    image: redis:7-alpine
+    container_name: justobot-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - justobot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # PgAdmin (opcional, para administração do banco)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: justobot-pgadmin
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@justobot.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - justobot-network
+    profiles:
+      - admin
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  justobot-network:
+    driver: bridge
