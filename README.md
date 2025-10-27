@@ -2,11 +2,26 @@
 
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688.svg)](https://fastapi.tiangolo.com)
+[![Electron](https://img.shields.io/badge/Electron-28.0-47848F.svg)](https://www.electronjs.org/)
+[![React](https://img.shields.io/badge/React-18.2-61DAFB.svg)](https://reactjs.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ## Sobre
 
-JUSTOBOT é uma plataforma extensível e robusta para consulta automatizada de processos judiciais através das APIs de diversos tribunais brasileiros. O sistema suporta consultas individuais e processamento em lote via planilhas Excel/CSV.
+JUSTOBOT é uma plataforma completa para consulta automatizada de processos judiciais através das APIs de diversos tribunais brasileiros.
+
+**Disponível em 2 versões:**
+
+🖥️ **Aplicação Desktop para macOS** - Interface moderna com Galileo Glass UI
+- Instalação via Homebrew
+- Sistema de credenciais integrado
+- Interface nativa com Electron + React
+- Backend Python integrado
+
+🌐 **API REST** - Para integração com sistemas
+- FastAPI com documentação automática
+- Processamento assíncrono
+- Docker ready
 
 ### Destaques
 
@@ -55,12 +70,32 @@ Cada tribunal implementa a interface `BaseTribunal` com métodos padronizados:
 
 ## Instalação
 
-### Requisitos
+### 🖥️ Aplicação Desktop (macOS)
+
+**Via Homebrew (Recomendado):**
+
+```bash
+# Adicionar tap
+brew tap guilhermedeieno-collab/justobot
+
+# Instalar
+brew install --cask justobot
+```
+
+**Download Direto:**
+
+Baixe o arquivo `.dmg` das [Releases](https://github.com/guilhermedeieno-collab/JUSTOBOT/releases)
+
+📖 [Guia Completo de Instalação Desktop](docs/DESKTOP_INSTALL.md)
+
+### 🌐 API REST
+
+#### Requisitos
 - Python 3.11+
 - PostgreSQL 14+
 - Redis (opcional, para cache)
 
-### Setup Rápido
+#### Setup Rápido
 
 **Opção 1: Script Automático**
 
