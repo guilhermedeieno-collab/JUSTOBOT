@@ -11,6 +11,9 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.api.routes import cases, bulk
 
+# Importa tribunais para registrá-los automaticamente
+from app.tribunals.tjsp import client as tjsp_client  # noqa
+
 # Configuração de logging
 setup_logging()
 
