@@ -61,3 +61,10 @@ temp/
 
 # Docker
 docker-compose.override.yml
+
+# Test files and examples
+exemplo_*.xlsx
+exemplo_*.csv
+resultados*.xlsx
+coverage.xml
+htmlcov/
